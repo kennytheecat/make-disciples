@@ -10,44 +10,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-
-// callback: login section
-function mdvp_callback_section_login() {
+// callback: radio field
+function mdvp_sources_render( $args ) {
 	
-	echo '<p>'. esc_html__('Choose which sources you would like to add to the visitor plugin.', 'mdvp') .'</p>';
-	
-}
-
-
-
-// callback: admin section
-function mdvp_callback_section_admin() {
-	
-	echo '<p>'. esc_html__('These settings enable you to customize the WP Admin Area.', 'mdvp') .'</p>';
-	
-}
-
-
-
-// callback: text field
-function mdvp_callback_field_text( $args ) {
-	
-	$options = get_option( 'mdvp_options', mdvp_options_default() );
+	//$options = get_option( 'mdvp_sources', mdvp_sources_default() );
+	$options = get_option( 'mdvp_settings' );
 	
 	$id    = isset( $args['id'] )    ? $args['id']    : '';
 	$label = isset( $args['label'] ) ? $args['label'] : '';
+		
+	$radio_options = mdvp_sources_radio();
 	
-	$value = isset( $options[$id] ) ? sanitize_text_field( $options[$id] ) : '';
-	
-	echo '<input id="mdvp_options_'. $id .'" name="mdvp_options['. $id .']" type="text" size="40" value="'. $value .'"><br />';
-	echo '<label for="mdvp_options_'. $id .'">'. $label .'</label>';
+	foreach ( $radio_options as $value => $label ) {
+		
+		$checked = '';
+		if ( isset( $options[$id] ) ) {
+			$checked = checked((in_array($value, $options[$id])), true, false);
+		}
+		
+		echo '<label><input name="mdvp_settings['. $id .'][]" type="checkbox" value="'. $value .'"'. $checked .'> ';
+		echo '<span>'. $label .'</span></label><br />';
+		
+	}
 	
 }
 
 
-
 // radio field options
-function mdvp_options_radio() {
+function mdvp_sources_radio() {
 	
 	return array(
 		
@@ -59,19 +49,16 @@ function mdvp_options_radio() {
 	
 }
 
-
-
-
-
 // callback: radio field
-function mdvp_callback_field_checkboxes( $args ) {
+function mdvp_list_render( $args ) {
 	
-	$options = get_option( 'mdvp_options', mdvp_options_default() );
+	$options = get_option( 'mdvp_settings' );
 	
 	$id    = isset( $args['id'] )    ? $args['id']    : '';
 	$label = isset( $args['label'] ) ? $args['label'] : '';
+	$source = isset( $args['source'] ) ? $args['source'] : '';
 		
-	$radio_options = mdvp_options_radio();
+	$radio_options = mdvp_settings_create_list( $source );
 	
 	foreach ( $radio_options as $value => $label ) {
 		
@@ -80,86 +67,23 @@ function mdvp_callback_field_checkboxes( $args ) {
 			$checked = checked((in_array($value, $options[$id])), true, false);
 		}
 		
-		echo '<label><input name="mdvp_options['. $id .'][]" type="checkbox" value="'. $value .'"'. $checked .'> ';
+		echo '<label><input name="mdvp_settings['. $id .'][]" type="checkbox" value="'. $value .'"'. $checked .'> ';
 		echo '<span>'. $label .'</span></label><br />';
 		
 	}
 	
-}
-
-// callback: radio field
-function mdvp_callback_articles_list( $args ) {
+	/*
 	
-	$options = get_option( 'mdvp_options', mdvp_options_default() );
+	$presave = $options['mdvp_' . $source . 's_list'];
+	$presave = implode(', ', $presave);
+	echo '<label><input name="presave_' . $source . 's_list" type="hidden" value="'. $presave . '"> ';
 	
-	$id    = isset( $args['id'] )    ? $args['id']    : '';
-	$label = isset( $args['label'] ) ? $args['label'] : '';
-		
-	$radio_options = mdvp_options_create_list( 'Articles', 'article');
-	
-	foreach ( $radio_options as $value => $label ) {
-		
-		$checked = '';
-		if ( isset( $options[$id] ) ) {
-			$checked = checked((in_array($value, $options[$id])), true, false);
-		}
-		
-		echo '<label><input name="mdvp_options['. $id .'][]" type="checkbox" value="'. $value .'"'. $checked .'> ';
-		echo '<span>'. $label .'</span></label><br />';
-		
-	}
+	*/
 	
 }
 
-// callback: radio field
-function mdvp_callback_podcasts_list( $args ) {
-	
-	$options = get_option( 'mdvp_options', mdvp_options_default() );
-	
-	$id    = isset( $args['id'] )    ? $args['id']    : '';
-	$label = isset( $args['label'] ) ? $args['label'] : '';
-		
-	$radio_options = mdvp_options_create_list( 'Podcasts', 'podcast');
-	
-	foreach ( $radio_options as $value => $label ) {
-		
-		$checked = '';
-		if ( isset( $options[$id] ) ) {
-			$checked = checked((in_array($value, $options[$id])), true, false);
-		}
-		
-		echo '<label><input name="mdvp_options['. $id .'][]" type="checkbox" value="'. $value .'"'. $checked .'> ';
-		echo '<span>'. $label .'</span></label><br />';
-		
-	}
-	
-}
 
-// callback: radio field
-function mdvp_callback_videos_list( $args ) {
-	
-	$options = get_option( 'mdvp_options', mdvp_options_default() );
-	
-	$id    = isset( $args['id'] )    ? $args['id']    : '';
-	$label = isset( $args['label'] ) ? $args['label'] : '';
-		
-	$radio_options = mdvp_options_create_list( 'Videos', 'video');
-	
-	foreach ( $radio_options as $value => $label ) {
-		
-		$checked = '';
-		if ( isset( $options[$id] ) ) {
-			$checked = checked((in_array($value, $options[$id])), true, false);
-		}
-		
-		echo '<label><input name="mdvp_options['. $id .'][]" type="checkbox" value="'. $value .'"'. $checked .'> ';
-		echo '<span>'. $label .'</span></label><br />';
-		
-	}
-	
-}
-
-function mdvp_options_create_list( $title, $source ) {
+function mdvp_settings_create_list( $source ) {
 
 	//$sources = array ('Articles' => 'article', 'Podcasts' => 'podcast', 'Videos' => 'video' );
 		
@@ -186,89 +110,43 @@ function mdvp_options_create_list( $title, $source ) {
 }
 
 
+function mdvp_settings_section_callback(  ) { 
 
+	echo __( 'This section description', 'icxc-nika.com' );
 
-
-// callback: textarea field
-function mdvp_callback_field_textarea( $args ) {
-	
-	$options = get_option( 'mdvp_options', mdvp_options_default() );
-	
-	$id    = isset( $args['id'] )    ? $args['id']    : '';
-	$label = isset( $args['label'] ) ? $args['label'] : '';
-	
-	$allowed_tags = wp_kses_allowed_html( 'post' );
-	
-	$value = isset( $options[$id] ) ? wp_kses( stripslashes_deep( $options[$id] ), $allowed_tags ) : '';
-	
-	echo '<textarea id="mdvp_options_'. $id .'" name="mdvp_options['. $id .']" rows="5" cols="50">'. $value .'</textarea><br />';
-	echo '<label for="mdvp_options_'. $id .'">'. $label .'</label>';
-	
 }
 
 
 
-// callback: checkbox field
-function mdvp_callback_field_checkbox( $args ) {
+function mdvp_sources_page(  ) { 
+
+//echo $file = file_put_contents('herewegoess.txt', "kennyss");
+
+	// check if user is allowed access
+	if ( ! current_user_can( 'manage_options' ) ) return;
 	
-	$options = get_option( 'mdvp_options', mdvp_options_default() );
+		
+	if ( isset($_POST['submit'] ) ) {
+		//echo $file = file_put_contents(get_template_directory_uri() . '/inc/herewegoo.txt', 'bitches');
+		
+		//mdvp_check_if_listed();
+	} 
 	
-	$id    = isset( $args['id'] )    ? $args['id']    : '';
-	$label = isset( $args['label'] ) ? $args['label'] : '';
-	
-	$checked = isset( $options[$id] ) ? checked( $options[$id], 1, false ) : '';
-	
-	echo '<input id="mdvp_options_'. $id .'" name="mdvp_options['. $id .']" type="checkbox" value="1"'. $checked .'> ';
-	echo '<label for="mdvp_options_'. $id .'">'. $label .'</label>';
-	
+	?>
+	<form method='post' action='options.php'>
+	<!--<form method='post'>-->
+
+		<h2>Make Disciples</h2>
+
+		<?php
+		settings_fields( 'pluginPage' );
+		do_settings_sections( 'pluginPage' );
+		submit_button();
+		?>
+
+	</form>
+	<?php
+
 }
 
-
-
-// select field options
-function mdvp_options_select() {
-	
-	return array(
-		
-		'default'   => esc_html__('Default',   'mdvp'),
-		'light'     => esc_html__('Light',     'mdvp'),
-		'blue'      => esc_html__('Blue',      'mdvp'),
-		'coffee'    => esc_html__('Coffee',    'mdvp'),
-		'ectoplasm' => esc_html__('Ectoplasm', 'mdvp'),
-		'midnight'  => esc_html__('Midnight',  'mdvp'),
-		'ocean'     => esc_html__('Ocean',     'mdvp'),
-		'sunrise'   => esc_html__('Sunrise',   'mdvp'),
-		
-	);
-	
-}
-
-
-
-// callback: select field
-function mdvp_callback_field_select( $args ) {
-	
-	$options = get_option( 'mdvp_options', mdvp_options_default() );
-	
-	$id    = isset( $args['id'] )    ? $args['id']    : '';
-	$label = isset( $args['label'] ) ? $args['label'] : '';
-	
-	$selected_option = isset( $options[$id] ) ? sanitize_text_field( $options[$id] ) : '';
-	
-	$select_options = mdvp_options_select();
-	
-	echo '<select id="mdvp_options_'. $id .'" name="mdvp_options['. $id .']">';
-	
-	foreach ( $select_options as $value => $option ) {
-		
-		$selected = selected( $selected_option === $value, true, false );
-		
-		echo '<option value="'. $value .'"'. $selected .'>'. $option .'</option>';
-		
-	}
-	
-	echo '</select> <label for="mdvp_options_'. $id .'">'. $label .'</label>';
-	
-}
-
-
+?>

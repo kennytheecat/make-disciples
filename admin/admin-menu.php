@@ -37,7 +37,7 @@ function mdvp_add_sublevel_menu() {
 	);
 	
 }
-add_action( 'admin_menu', 'mdvp_add_sublevel_menu' );
+//add_action( 'admin_menu', 'mdvp_add_sublevel_menu' );
 
 
 
@@ -71,4 +71,9 @@ function mdvp_add_toplevel_menu() {
 }
 // add_action( 'admin_menu', 'mdvp_add_toplevel_menu' );
 
+function mdvp_add_admin_menu(  ) { 
 
+	add_options_page( 'Make Disciples', 'Make Disciples', 'manage_options', 'make_disciples', 'mdvp_sources_page' );
+
+}
+add_action( 'admin_menu', 'mdvp_add_admin_menu' );

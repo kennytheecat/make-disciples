@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name:  MyPlugin
+Plugin Name:  Make Disciples Visitor Plugin
 Description:  Example plugin for the video tutorial series, "WordPress: Plugin Development", available at Lynda.com.
 Plugin URI:   https://profiles.wordpress.org/specialk
 Author:       Jeff Starr
@@ -41,17 +41,23 @@ if ( is_admin() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'admin/settings-callbacks.php';
 	require_once plugin_dir_path( __FILE__ ) . 'admin/settings-validate.php';
 
+	// Custom Post Types
+	require_once plugin_dir_path( __FILE__ ) . 'admin/cpt/cpt-articles.php';
+	require_once plugin_dir_path( __FILE__ ) . 'admin/cpt/cpt-podcasts.php';
+	require_once plugin_dir_path( __FILE__ ) . 'admin/cpt/cpt-videos.php';
+	
+	require_once plugin_dir_path( __FILE__ ) . 'admin/mdvp-load.php';
+	require_once plugin_dir_path( __FILE__ ) . 'admin/mdvp-visitor_section.php';
+
+	
 }
 
 
 
 // include plugin dependencies: admin and public
-require_once plugin_dir_path( __FILE__ ) . 'includes/core-functions.php';
+//require_once plugin_dir_path( __FILE__ ) . 'includes/core-functions.php';
 
-// Custom Post Types
-require_once plugin_dir_path( __FILE__ ) . 'admin/cpt/cpt-articles.php';
-require_once plugin_dir_path( __FILE__ ) . 'admin/cpt/cpt-podcasts.php';
-require_once plugin_dir_path( __FILE__ ) . 'admin/cpt/cpt-videos.php';
+
 
 
 
