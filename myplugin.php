@@ -48,6 +48,8 @@ if ( is_admin() ) {
 	
 	require_once plugin_dir_path( __FILE__ ) . 'admin/mdvp-load.php';
 	require_once plugin_dir_path( __FILE__ ) . 'admin/mdvp-visitor_section.php';
+	
+	require_once plugin_dir_path( __FILE__ ) . 'example-functions.php';
 
 	
 }
